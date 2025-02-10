@@ -2,8 +2,12 @@ import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
 import { fetchAnilistInfo, getServers, getSources } from "./utils/methods";
+import { cors } from "hono/cors"; // Import the CORS middleware
 
 const app = new Hono();
+
+// Use the CORS middleware globally
+app.use('*', cors());
 
 app.get("/", async (c) => {
   return c.json({
@@ -39,9 +43,7 @@ app.get("/anime/servers/:id", async (c) => {
 app.get("/anime/sources", async (c) => {
   const { serverId, episodeId } = c.req.query();
   if (!serverId || !episodeId) {
-    throw new HTTPException(400, {
-      message: "Provide server Id & episode Id !",
-    });
+    throw new HTTPException(400, { message: "Both serverId and episodeId are required!" });
   }
   const data = await getSources(serverId, episodeId);
   if (!data) {
