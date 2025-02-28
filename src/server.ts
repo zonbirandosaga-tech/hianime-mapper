@@ -6,8 +6,20 @@ import { cors } from "hono/cors"; // Import the CORS middleware
 
 const app = new Hono();
 
-// Use the CORS middleware globally
-app.use('*', cors());
+// Define an array of allowed origins
+const allowedOrigins = [
+  "https://aniteams-v2.vercel.app",
+  "https://aniteams-next.netlify.app",
+];
+
+// Use the CORS middleware globally with a function to check the origin
+app.use(cors({
+  origin: (origin) => {
+    // Allow requests with no origin (like mobile apps, curl requests)
+    if (!origin) return true;
+    return allowedOrigins.includes(origin);
+  },
+}));
 
 app.get("/", async (c) => {
   return c.json({
