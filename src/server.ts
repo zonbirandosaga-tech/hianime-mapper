@@ -7,7 +7,7 @@ import { cors } from "hono/cors"; // Import the CORS middleware
 const app = new Hono();
 
 // Use the CORS middleware globally
-app.use('https://aniteams-v2.vercel.app,https://aniteams-next.netlify.app', cors());
+app.use('*', cors());
 
 app.get("/", async (c) => {
   return c.json({
