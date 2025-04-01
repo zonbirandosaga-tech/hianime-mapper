@@ -10,6 +10,7 @@ const app = new Hono();
 const allowedOrigins = [
   "https://aniteams-v2.vercel.app",
   "https://aniteams-next.netlify.app",
+  "https://inuani.vercel.app"
 ];
 
 // Use the CORS middleware globally with a function to check the origin
