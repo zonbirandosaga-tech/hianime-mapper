@@ -249,7 +249,14 @@ _response_
   }
  }
 ```
-
+for cors  edit the server.ts file 
+```javascript
+const allowedOrigins = [
+  "https://aniteams-v2.vercel.app",
+  "https://aniteams-next.netlify.app",
+  "https://inuani.vercel.app"
+];
+```
 ## Acknowledgements
 
 - [Consumet](https://github.com/consumet/consumet.ts)
