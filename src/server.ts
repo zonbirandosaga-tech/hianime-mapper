@@ -2,31 +2,29 @@ import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
 import { fetchAnilistInfo, getServers, getSources } from "./utils/methods";
-import { cors } from "hono/cors"; // Import the CORS middleware
+import { cors } from "hono/cors";
+import * as dotenv from "dotenv";
+
+// Load environment variables
+dotenv.config();
 
 const app = new Hono();
 
-// Define an array of allowed origins
-const allowedOrigins = [
-  "https://aniteams-v2.vercel.app",
-  "https://aniteams-next.netlify.app",
-  "https://inuani.vercel.app",
-  "https://aniteams.vercel.app"
-];
+// Load and parse allowed origins from environment
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(",").map(origin => origin.trim())
+  : [];
 
-// Use the CORS middleware globally with a function to check the origin
 app.use(cors({
   origin: (origin) => {
-    // Allow requests with no origin (like mobile apps, curl requests)
-    if (!origin) return null; // Allow requests with no origin by returning null
-    return allowedOrigins.includes(origin) ? origin : null; // Return the origin if allowed, otherwise null
+    if (!origin) return null;
+    return allowedOrigins.includes(origin) ? origin : null;
   },
 }));
 
 app.get("/", async (c) => {
   return c.json({
-    about:
-      "This API maps anilist anime to https://hianime.to and also returns the M3U8 links !",
+    about: "This API maps anilist anime to https://hianime.to and also returns the M3U8 links !",
     status: 200,
     routes: [
       "/anime/info/:anilistId",
